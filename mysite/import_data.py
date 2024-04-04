@@ -38,7 +38,7 @@ for file in csv_files:
         # Create the stock in the database
         stock = Stock(
             ticker=ticker,
-            date=row["Date"],
+            date=pd.to_datetime(row["Date"]).date(),
             open=row["Open"],
             close=row["Close"],
             high=row["High"],
