@@ -2,7 +2,7 @@
 
 ## Pre-requisites
 
-- [Python 3.8+](https://www.python.org/downloads/)
+- [Python 3.10+](https://www.python.org/downloads/)
 - [PostgreSQL 12+](https://www.postgresql.org/download/)
 
 > You also run in container environment. See [README.Docker.md](README.Docker.md) for more information.
