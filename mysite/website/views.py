@@ -1,7 +1,9 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, JsonResponse, Http404
 
 from rest_framework.decorators import api_view
+
+from django.utils import dateparse
 
 from .models import Ticker, Stock
 from .serializer import TickerSerializer, StockSerializer
@@ -27,7 +29,10 @@ def query_ticker(request):
     ticker_code = ticker_code.upper()
 
     # Query the database for the ticker data
-    ticker_data = Ticker.objects.filter(ticker=ticker_code)
+    try:
+        ticker_data = get_object_or_404(Ticker, ticker=ticker_code)
+    except Http404:
+        return HttpResponse(status=404, content="Ticker not found.")
 
     # Serialize the data
     response = TickerSerializer(ticker_data, many=True)
@@ -49,8 +54,29 @@ def query_stock(request):
     # Switch the ticker code to uppercase
     ticker_code = ticker_code.upper()
 
+    # Change the dates to datetime objects
+    start_date = dateparse.parse_date(start_date)
+    end_date = dateparse.parse_date(end_date)
+
+    if start_date is None or end_date is None:
+        return HttpResponse(status=400, content="Invalid date format.")
+
     # Find the ticker id
-    ticker = Ticker.objects.get(ticker=ticker_code)
+    try:
+        ticker = get_object_or_404(Ticker, ticker=ticker_code)
+    except Http404:
+        return HttpResponse(status=404, content="Ticker not found.")
+
+    # Check if the start date exists in record
+    earlies_start_date = Stock.objects.filter(ticker=ticker.id).order_by('date').first().date
+    if start_date < earlies_start_date:
+        return HttpResponse(status=400, content="Start date is earlier than the earliest date in record.")
+
+    # Check if the end date exists the maximum end date in record
+    max_end_date = Stock.objects.filter(ticker=ticker.id).order_by('-date').first().date
+    if end_date > max_end_date:
+        print("End date is later than the latest date in record. The end date is changed to the latest date in record.")
+        end_date = max_end_date
 
     # Query the database for the ticker data
     ticker_data = Stock.objects.filter(ticker=ticker.id, date__range=[start_date, end_date])
