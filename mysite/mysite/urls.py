@@ -19,5 +19,5 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('data-fetch/', include('data_fetch.urls')),
+    path('data-fetch/', include('website.urls')),
 ]
