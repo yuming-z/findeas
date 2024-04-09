@@ -1,3 +1,9 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+def validate(request):
+    '''This function is used to validate the connection to the database.'''
+
+    success = "The connection for data fetching is successful."
+
+    return HttpResponse(status=200, content=success)
