@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 
 from .models import Ticker, Stock
-from .serializer import TickerSerializer
+from .serializer import TickerSerializer, StockSerializer
 
 @api_view(['GET'])
 def validate(request):
@@ -55,4 +55,7 @@ def query_stock(request):
     # Query the database for the ticker data
     ticker_data = Stock.objects.filter(ticker=ticker.id, date__range=[start_date, end_date])
 
-    return JsonResponse(list(ticker_data.values()), safe=False)
+    # Serialize the data
+    response = StockSerializer(ticker_data, many=True)
+
+    return JsonResponse(response.data, safe=False)
