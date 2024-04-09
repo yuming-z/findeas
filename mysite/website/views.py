@@ -1,8 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 
-from .models import Ticker, Stock
+from rest_framework.decorators import api_view
 
+from .models import Ticker, Stock
+from .serializer import TickerSerializer
+
+@api_view(['GET'])
 def validate(request):
     '''This function is used to validate the connection to the database.'''
 
@@ -10,6 +14,7 @@ def validate(request):
 
     return HttpResponse(status=200, content=success)
 
+@api_view(['GET'])
 def query_ticker(request):
     '''
     This function is used to query the database for the ticker data.
@@ -24,9 +29,17 @@ def query_ticker(request):
     # Query the database for the ticker data
     ticker_data = Ticker.objects.filter(ticker=ticker_code)
 
-    return JsonResponse(list(ticker_data.values()), safe=False)
+    # Serialize the data
+    response = TickerSerializer(ticker_data, many=True)
 
+    return JsonResponse(response.data, safe=False)
+
+
+@api_view(['GET'])
 def query_stock(request):
+    '''
+    This function is used to query the database for stock data.
+    '''
 
     # Get the parameters
     ticker_code = request.GET.get('ticker')
