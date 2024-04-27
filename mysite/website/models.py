@@ -1,5 +1,7 @@
 from django.db import models
 
+from .validators import validate_weakMACD, validate_one_hot_encoding
+
 # Create your models here.
 class Ticker(models.Model):
     ticker = models.CharField(max_length=10)
@@ -47,7 +49,7 @@ class Indicator(models.Model):
     rsi_6 = models.FloatField()
     rsi_12 = models.FloatField()
 
-    weakMACD = models.IntegerField(choices=[-1, 0, 1])
+    weakMACD = models.IntegerField(validators=[validate_weakMACD])
 
     macd_diff = models.FloatField()
 
@@ -55,11 +57,11 @@ class Indicator(models.Model):
     # Use 0 and 1 --> one-hot-encoding
     # the data will eventually go to the AI engine
     # precausion day = 5
-    loss = models.IntegerField(choices=[0, 1])
-    causion = models.IntegerField(choices=[0, 1])
+    loss = models.IntegerField(validators=[validate_one_hot_encoding])
+    causion = models.IntegerField(validators=[validate_one_hot_encoding])
     # precausion day = 1
-    gain = models.IntegerField(choices=[0, 1])
-    safe = models.IntegerField(choices=[0, 1])
+    gain = models.IntegerField(validators=[validate_one_hot_encoding])
+    safe = models.IntegerField(validators=[validate_one_hot_encoding])
 
     # flag
     flag = models.CharField(max_length=10, choices=flags)
