@@ -48,8 +48,8 @@ def query_stock(request):
 
     # Get the parameters
     ticker_code = request.GET.get('ticker')
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
+    start_date = request.GET.get('startDate')
+    end_date = request.GET.get('endDate')
 
     # Switch the ticker code to uppercase
     ticker_code = ticker_code.upper()
