@@ -31,23 +31,23 @@ class Indicator(models.Model):
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
 
     # bollinger bands
-    sma = models.FloatField()
-    sd = models.FloatField()
-    ub = models.FloatField()
-    lb = models.FloatField()
+    sma = models.FloatField(blank=True)
+    sd = models.FloatField(blank=True)
+    ub = models.FloatField(blank=True)
+    lb = models.FloatField(blank=True)
 
     macd = models.FloatField()
     macd_signal = models.FloatField()
 
     gain = models.FloatField()
     loss = models.FloatField()
-    avg_gain = models.FloatField()
-    avg_loss = models.FloatField()
-    rs = models.FloatField()
+    avg_gain = models.FloatField(blank=True)
+    avg_loss = models.FloatField(blank=True)
 
-    rsi = models.FloatField()
-    rsi_6 = models.FloatField()
-    rsi_12 = models.FloatField()
+    rs = models.FloatField(blank=True)
+    rsi = models.FloatField(blank=True)
+    rsi_6 = models.FloatField(blank=True)
+    rsi_12 = models.FloatField(blank=True)
 
     weakMACD = models.IntegerField(validators=[validate_weakMACD])
 
@@ -57,11 +57,11 @@ class Indicator(models.Model):
     # Use 0 and 1 --> one-hot-encoding
     # the data will eventually go to the AI engine
     # precausion day = 5
-    loss = models.IntegerField(validators=[validate_one_hot_encoding])
-    causion = models.IntegerField(validators=[validate_one_hot_encoding])
+    isLoss = models.IntegerField(validators=[validate_one_hot_encoding], default=0, null=True)
+    isCausion = models.IntegerField(validators=[validate_one_hot_encoding], default=0, null=True)
     # precausion day = 1
-    gain = models.IntegerField(validators=[validate_one_hot_encoding])
-    safe = models.IntegerField(validators=[validate_one_hot_encoding])
+    isGain = models.IntegerField(validators=[validate_one_hot_encoding], default=0, null=True)
+    isSafe = models.IntegerField(validators=[validate_one_hot_encoding], default=0, null=True)
 
     # flag
     flag = models.CharField(max_length=10, choices=flags)
