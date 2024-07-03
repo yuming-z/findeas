@@ -6,7 +6,7 @@
 
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
-ARG PYTHON_VERSION=3.11.9
+ARG PYTHON_VERSION=latest
 FROM python:${PYTHON_VERSION} as base
 
 # Prevents Python from writing pyc files.
@@ -32,6 +32,9 @@ RUN adduser \
     --no-create-home \
     --uid "${UID}" \
     appuser
+
+# Update the package manager
+RUN python -m pip install --upgrade pip
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
