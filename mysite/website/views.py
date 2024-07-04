@@ -8,6 +8,27 @@ from django.utils import dateparse
 from .models import Ticker, Stock
 from .serializer import TickerSerializer, StockSerializer
 
+def is_exist_ticker(ticker_code):
+    '''
+    This function is used to validate whether the given ticker code exists in the data storage.
+
+    Parameters:
+    - ticker_code: str
+
+    Returns:
+    - the Ticker object if the ticker code exists
+    '''
+
+    # Convert the ticker code to uppercase
+    ticker_code = ticker_code.upper()
+
+    # Query the database for the ticker data
+    try:
+        ticker_data = get_object_or_404(Ticker, ticker=ticker_code)
+    except Http404:
+        return HttpResponse(status=404, content="Ticker not found.")
+    return ticker_data
+
 @api_view(['GET'])
 def validate(request):
     '''This function is used to validate the connection to the database.'''
@@ -85,3 +106,24 @@ def query_stock(request):
     response = StockSerializer(ticker_data, many=True)
 
     return JsonResponse(response.data, safe=False)
+
+@api_view(['GET'])
+def query_stock_analytic_data(request):
+    '''
+    This function is used to fetch the analytic data processed for the stock.
+
+    The web request will take in the ticker code and the date range,
+    and return the analytic data for the stock in that date range.
+
+    The analytic data includes:
+    - Bollinger Bands
+    - MACD
+    - RSI
+    - Weak MACD
+    - MACD Difference
+    '''
+
+    # Get the parameters
+    ticker_code = request.GET.get('ticker')
+    start_date = request.GET.get('startDate')
+    end_date = request.GET.get('endDate')
