@@ -28,26 +28,26 @@ class Stock(models.Model):
     }
 
     # bollinger bands
-    sma = models.FloatField(blank=True)
-    sd = models.FloatField(blank=True)
-    ub = models.FloatField(blank=True)
-    lb = models.FloatField(blank=True)
+    sma = models.FloatField(blank=True, null=True)
+    sd = models.FloatField(blank=True, null=True)
+    ub = models.FloatField(blank=True, null=True)
+    lb = models.FloatField(blank=True, null=True)
 
     # macd
     macd = models.FloatField()
     macd_signal = models.FloatField()
 
     # gain/loss
-    gain = models.FloatField()
-    loss = models.FloatField()
-    avg_gain = models.FloatField(blank=True)
-    avg_loss = models.FloatField(blank=True)
+    gain = models.FloatField(blank=True, null=True)
+    loss = models.FloatField(blank=True, null=True)
+    avg_gain = models.FloatField(blank=True, null=True)
+    avg_loss = models.FloatField(blank=True, null=True)
 
     # rsi
-    rs = models.FloatField(blank=True)
-    rsi = models.FloatField(blank=True)
-    rsi_6 = models.FloatField(blank=True)
-    rsi_12 = models.FloatField(blank=True)
+    rs = models.FloatField(blank=True, null=True)
+    rsi = models.FloatField(blank=True, null=True)
+    rsi_6 = models.FloatField(blank=True, null=True)
+    rsi_12 = models.FloatField(blank=True, null=True)
 
     # Weak MACD
     weakMACD = models.IntegerField(validators=[validate_weakMACD])
@@ -67,4 +67,4 @@ class Stock(models.Model):
     isSafe = models.IntegerField(validators=[validate_one_hot_encoding], default=0, null=True)
 
     # flag
-    flag = models.CharField(max_length=10, choices=flags)
+    flag = models.CharField(max_length=10, choices=flags, default="Green")
