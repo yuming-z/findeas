@@ -34,8 +34,8 @@ class Stock(models.Model):
     lb = models.FloatField(blank=True, null=True)
 
     # macd
-    macd = models.FloatField()
-    macd_signal = models.FloatField()
+    macd = models.FloatField(blank=True, null=True)
+    macd_signal = models.FloatField(blank=True, null=True)
 
     # gain/loss
     gain = models.FloatField(blank=True, null=True)
@@ -50,10 +50,10 @@ class Stock(models.Model):
     rsi_12 = models.FloatField(blank=True, null=True)
 
     # Weak MACD
-    weakMACD = models.IntegerField(validators=[validate_weakMACD])
+    weakMACD = models.IntegerField(validators=[validate_weakMACD], blank=True, null=True)
 
     # MACD difference
-    macd_diff = models.FloatField()
+    macd_diff = models.FloatField(blank=True, null=True)
 
     # Flag determinants
     # Use 0 and 1 --> one-hot-encoding
