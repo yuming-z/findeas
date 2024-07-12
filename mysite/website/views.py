@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from django.utils import dateparse
 
 from .models import Ticker, Stock
-from .serializer import TickerSerializer, StockSerializer
+from .serializer import TickerSerializer, StockSerializer, StockSimplifiedSerializer
 
 def is_exist_ticker(ticker_code):
     '''
@@ -59,8 +59,11 @@ def is_valid_date_range(start_date, end_date, ticker: Ticker):
     # If the end date exceeds the maximum end date, change the end date to the maximum end date
     max_end_date = Stock.objects.filter(ticker=ticker.id).order_by('-date').first().date
     if end_date > max_end_date:
-        print("End date is later than the latest date in record. The end date is changed to the latest date in record.")
+        print("End date is later than the latest date in record.")
+        print("The end date is changed to the latest date in record.")
         end_date = max_end_date
+
+    return start_date, end_date
 
 @api_view(['GET'])
 def validate(request):
@@ -109,7 +112,7 @@ def query_stock(request):
     ticker_data = Stock.objects.filter(ticker=ticker.id, date__range=[start_date, end_date])
 
     # Serialize the data
-    response = StockSerializer(ticker_data, many=True)
+    response = StockSimplifiedSerializer(ticker_data, many=True)
 
     return JsonResponse(response.data, safe=False)
 
@@ -138,4 +141,12 @@ def query_stock_analytic_data(request):
     ticker = is_exist_ticker(ticker_code)
 
     # Validate the date range
-    is_valid_date_range(start_date, end_date, ticker)
+    start_date, end_date = is_valid_date_range(start_date, end_date, ticker)
+
+    # Query the database for the ticker data
+    ticker_data = Stock.objects.filter(ticker=ticker.id, date__range=[start_date, end_date])
+
+    # Serialize the data
+    response = StockSerializer(ticker_data, many=True)
+
+    return JsonResponse(response.data, safe=False)
