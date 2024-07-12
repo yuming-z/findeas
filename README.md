@@ -3,7 +3,7 @@
 ## Pre-requisites
 
 - [Python 3.10+](https://www.python.org/downloads/)
-- [PostgreSQL 12+](https://www.postgresql.org/download/)
+- [MySQL 8.0+](https://dev.mysql.com/downloads/mysql/)
 
 > You also run in container environment. See [README.Docker.md](README.Docker.md) for more information.
 
@@ -44,30 +44,48 @@ pip install -r requirements.txt
 
 5. Create a `.env` file in the root directory of the project and copy all contents from `.env.scaffold` to `.env`.
 
-6. Create a PostgreSQL database.
+6. Create a MySQL database.
 
-You should have a default user `postgres` with the password you defined during installation.
-
-Connect to the PostgreSQL server:
+Access the MySQL server by opening `mysql.exe` (Windows user), or access via the command line:
 
 ```bash
-psql --user postgres
+mysql -u root
 ```
 
-> You will be prompted to enter the password for the `postgres` user.
+> If you install MySQL via Homebrew, you need to run the `mysql` services first;
+> 
+> ```bash
+> brew services start mysql
+> ```
+
+Execute the following statements in the MySQL command line to set up the database:
+
+```sql
+CREATE DATABASE knowyourpartner;
+CREATE USER 'group12'@'localhost' IDENTIFIED BY 'group12';
+GRANT ALL PRIVILEGES ON knowyourpartner.* TO 'group12'@'localhost';
+FLUSH PRIVILEGES;
+```
 
 Create a database:
 
 ```sql
-CREATE DATABASE findea;
+CREATE DATABASE findeas;
 ```
 
 It is a recommended practice to create a separate user for the database. You can create a new user with the following command:
 
 ```sql
-CREATE USER user WITH PASSWORD 'password'; -- the user name and password can be anything you want
-GRANT ALL PRIVILEGES ON DATABASE findea TO user;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO user;
+CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';
+-- username and password are placeholders
+GRANT ALL PRIVILEGES ON findeas.* TO 'username'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Connect the database:
+
+```sql
+CONNECT findeas;
 ```
 
 7. Fill in the database credentials in the `.env` file.

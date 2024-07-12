@@ -14,7 +14,7 @@ services:
       - db
 
   db:
-    image: postgres:latest
+    image: mysql:latest
     env_file:
       - path: mysite/.env
         required: true
