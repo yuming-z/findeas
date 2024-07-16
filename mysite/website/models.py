@@ -20,42 +20,45 @@ class Stock(models.Model):
     dividend = models.IntegerField()
     split = models.FloatField()
 
-class Indicator(models.Model):
-
+    # Analytic metrics
     flags = {
         "Yellow": "In warning",
         "Green": "Safe",
         "Red": "In danger"
     }
 
-    stock = models.ForeignKey(Stock, on_delete=models.CASCADE)
-
     # bollinger bands
-    sma = models.FloatField(blank=True)
-    sd = models.FloatField(blank=True)
-    ub = models.FloatField(blank=True)
-    lb = models.FloatField(blank=True)
+    sma = models.FloatField(blank=True, null=True)
+    sd = models.FloatField(blank=True, null=True)
+    ub = models.FloatField(blank=True, null=True)
+    lb = models.FloatField(blank=True, null=True)
 
-    macd = models.FloatField()
-    macd_signal = models.FloatField()
+    # macd
+    macd = models.FloatField(blank=True, null=True)
+    macd_signal = models.FloatField(blank=True, null=True)
 
-    gain = models.FloatField()
-    loss = models.FloatField()
-    avg_gain = models.FloatField(blank=True)
-    avg_loss = models.FloatField(blank=True)
+    # gain/loss
+    gain = models.FloatField(blank=True, null=True)
+    loss = models.FloatField(blank=True, null=True)
+    avg_gain = models.FloatField(blank=True, null=True)
+    avg_loss = models.FloatField(blank=True, null=True)
 
-    rs = models.FloatField(blank=True)
-    rsi = models.FloatField(blank=True)
-    rsi_6 = models.FloatField(blank=True)
-    rsi_12 = models.FloatField(blank=True)
+    # rsi
+    rs = models.FloatField(blank=True, null=True)
+    rsi = models.FloatField(blank=True, null=True)
+    rsi_6 = models.FloatField(blank=True, null=True)
+    rsi_12 = models.FloatField(blank=True, null=True)
 
-    weakMACD = models.IntegerField(validators=[validate_weakMACD])
+    # Weak MACD
+    weakMACD = models.IntegerField(validators=[validate_weakMACD], blank=True, null=True)
 
-    macd_diff = models.FloatField()
+    # MACD difference
+    macd_diff = models.FloatField(blank=True, null=True)
 
     # Flag determinants
     # Use 0 and 1 --> one-hot-encoding
     # the data will eventually go to the AI engine
+
     # precausion day = 5
     isLoss = models.IntegerField(validators=[validate_one_hot_encoding], default=0, null=True)
     isCausion = models.IntegerField(validators=[validate_one_hot_encoding], default=0, null=True)
@@ -64,4 +67,4 @@ class Indicator(models.Model):
     isSafe = models.IntegerField(validators=[validate_one_hot_encoding], default=0, null=True)
 
     # flag
-    flag = models.CharField(max_length=10, choices=flags)
+    flag = models.CharField(max_length=10, choices=flags, default="Green")
