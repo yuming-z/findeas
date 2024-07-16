@@ -32,13 +32,18 @@ for file in csv_files:
     ticker.save()
 
     # Read the csv file
-    data = pd.read_csv(file, parse_dates=['Date'])
+    data = pd.read_csv(file)
 
-    # Set the index to date
-    data.set_index('Date', inplace=True)
+    # Data cleaning
+    # Replace all NaN values with None
+    data.replace({float('nan'): None}, inplace=True)
 
     # Loop through all rows in the csv file
     for index, row in data.iterrows():
+
+        # Skip the row if there is no OHLC data
+        if row["Open"] is None or row["High"] is None or row["Low"] is None or row["Close"] is None:
+            continue
 
         # Create the stock in the database
         stock = Stock(
