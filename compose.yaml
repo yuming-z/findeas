@@ -19,7 +19,7 @@ services:
       - path: mysite/.env
         required: true
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/var/lib/mysql
   
 volumes:
-  postgres_data:
+  mysql_data:
