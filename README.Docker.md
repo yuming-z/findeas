@@ -10,7 +10,7 @@
 To run this application, make sure your docker is running, then run the following command:
 
 ```bash
-docker compose up --build --force-recreate --no-deps
+docker compose up --build --force-recreate
 ```
 
 Now you can access the application at [localhost:8000](http://localhost:8000).
