@@ -86,7 +86,7 @@ def query_ticker(request):
     ticker_data = is_exist_ticker(ticker_code)
 
     # Serialize the data
-    response = TickerSerializer(ticker_data, many=True)
+    response = TickerSerializer(ticker_data)
 
     return JsonResponse(response.data, safe=False)
 

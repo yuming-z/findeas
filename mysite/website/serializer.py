@@ -15,4 +15,4 @@ class StockSimplifiedSerializer(serializers.ModelSerializer):
 class StockSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
-        fields = ['date', 'open', 'high', 'low', 'close', 'volume', 'ub', 'lb', 'macd', 'macd_signal', 'rsi', 'weakMACD', 'macd_diff', 'flags']
+        fields = ['date', 'open', 'high', 'low', 'close', 'volume', 'ub', 'lb', 'macd', 'macd_signal', 'rsi', 'weakMACD', 'macd_diff', 'flag']
