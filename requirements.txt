@@ -3,7 +3,6 @@ contourpy==1.2.1
 cycler==0.12.1
 Django==5.1
 django-cors-headers==4.4.0
-django-rest-framework==0.1.0
 djangorestframework==3.15.2
 fonttools==4.53.1
 kiwisolver==1.4.5
